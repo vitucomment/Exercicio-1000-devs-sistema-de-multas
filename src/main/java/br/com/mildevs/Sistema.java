@@ -200,7 +200,7 @@ public class Sistema {
 				if(multaRemocao != null) {
 					multasDao.delete(codigoRemocao);
 				} else {
-					
+					System.out.println("A multa não existe. Operação cancelada!");
 				}
 				break;
 			default:
