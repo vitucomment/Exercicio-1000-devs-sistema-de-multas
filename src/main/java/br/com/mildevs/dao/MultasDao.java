@@ -15,7 +15,6 @@ public class MultasDao {
 		this.manager = Persistence.createEntityManagerFactory("sistema").createEntityManager();
 	}
 	
-	//CRIAR
 	public boolean create(Multa multa) {
 		manager.getTransaction().begin();
 		manager.persist(multa);
@@ -23,18 +22,16 @@ public class MultasDao {
 		return true;
 	}
 	
-	//CONSULTA UNICA
 	public Multa read(String codigoMulta) {
 		return manager.find(Multa.class, codigoMulta);
 	}
 	
-	//CONSULTA GERAL
+	@SuppressWarnings("unchecked")
 	public List<Multa> readAll(){
-		Query query = manager.createQuery( "select m from Multa as m");
+		Query query = manager.createQuery("select m from Multa as m");
 		return query.getResultList();
 	}
 	
-	//REMOVER
 	public boolean delete(String codigoMulta) {
 		Multa MultaASerRemovida = manager.find(Multa.class, codigoMulta);
 		
@@ -46,6 +43,4 @@ public class MultasDao {
 		this.manager.getTransaction().commit();
 		return true;
 	}
-	
-	
 }

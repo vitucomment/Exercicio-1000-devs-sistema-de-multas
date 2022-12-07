@@ -30,10 +30,9 @@ public class Multa {
 	
 	@Override
 	public String toString() {
-		return "COD_MULTA: " + getCodigoMulta()
+		return "[ COD_MULTA: " + getCodigoMulta()
 				+ "\nVALOR: " + getValor()
 				+ "\nPONTOS: " + getPontuacao()
-				+ "\nVEICULO: " + getVeiculo() + "\n"; 
-		
+				+ "\nVEICULO: " + getVeiculo() + " ]\n"; 
 	}
 }

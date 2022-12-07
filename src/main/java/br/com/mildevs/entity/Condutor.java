@@ -1,13 +1,12 @@
 package br.com.mildevs.entity;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,8 +29,16 @@ public class Condutor {
 	@Column(nullable = false)
 	private Integer pontuação = 20;
 	
-	@OneToMany(mappedBy = "condutor", cascade = CascadeType.ALL)
-	private List<Veiculo> veiculo;
+	@OneToOne(mappedBy = "condutor", cascade = CascadeType.ALL)
+	private Veiculo veiculo;
 	
+	@Override
+	public String toString() {
+		return "[ CNH: " + getNroCnh()
+				+ "\nData de emissao: " + getDataEmissao()
+				+ "\nOrgao emissor: " + getOrgaoEmissor()
+				+ "\nPontuação atual: " + getPontuação() + " ]\n"; 
+		
+	}
 	
 }

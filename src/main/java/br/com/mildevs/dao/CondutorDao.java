@@ -1,9 +1,9 @@
 package br.com.mildevs.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.mildevs.entity.Condutor;
+import br.com.mildevs.entity.Multa;
 import br.com.mildevs.entity.Veiculo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
@@ -17,7 +17,6 @@ public class CondutorDao {
 		this.manager = Persistence.createEntityManagerFactory("sistema").createEntityManager();
 	}
 
-	//CRIAR
 	public boolean create(Condutor condutor) {
 		manager.getTransaction().begin();
 		manager.persist(condutor);
@@ -30,9 +29,7 @@ public class CondutorDao {
 		if(condutor == null) return false;
 		if(veiculo.getCondutor() != null) return false;
 		
-		List<Veiculo> veiculos = new ArrayList();
-		veiculos.add(veiculo);
-		condutor.setVeiculo(veiculos);
+		condutor.setVeiculo(veiculo);
 		
 		this.manager.getTransaction().begin();
 		this.manager.merge(condutor);
@@ -41,24 +38,43 @@ public class CondutorDao {
 	}
 	
 	
-	//CONSULTA UNICA
+	public boolean transferirVeiculo(String placa, String cnhDestino) {
+		Condutor condutorDestino = this.manager.find(Condutor.class, cnhDestino);
+		Veiculo veiculo = this.manager.find(Veiculo.class, placa);
+		
+		veiculo.setCondutor(condutorDestino);
+		
+		this.manager.getTransaction().begin();
+		this.manager.merge(veiculo);
+		this.manager.getTransaction().commit();
+		return true;
+	}
+	
+	public boolean computarMulta(Multa multa, String placa) {
+		int pontos = multa.getPontuacao();
+		Condutor condutor = this.manager.find(Veiculo.class, placa).getCondutor();
+		condutor.setPontuação(condutor.getPontuação() - pontos);
+		this.manager.getTransaction().begin();
+		this.manager.merge(condutor);
+		this.manager.getTransaction().commit();
+		return true;
+	}
+	
 	public Condutor read(String nroCnh) {
 		return manager.find(Condutor.class, nroCnh);
 	}
 
-	//CONSULTA GERAL
+	@SuppressWarnings("unchecked")
 	public List<Condutor> readAll() {
 		Query query = manager.createQuery("select c from Condutor as c");
 		return query.getResultList();
 	}
 
-	//REMOÇÃO
 	public boolean delete(String nroCnh) {
 		Condutor condutorASerRemovido = manager.find(Condutor.class, nroCnh);
-
 		if (condutorASerRemovido == null)
 			return false;
-
+		
 		manager.getTransaction().begin();
 		manager.remove(condutorASerRemovido);
 		manager.getTransaction().commit();

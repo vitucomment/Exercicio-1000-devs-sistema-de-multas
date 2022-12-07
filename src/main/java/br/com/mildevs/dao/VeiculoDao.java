@@ -16,8 +16,7 @@ public class VeiculoDao {
 		this.manager = Persistence.createEntityManagerFactory("sistema").createEntityManager();
 	}
 
-	// CRIAR
-	public boolean create(Veiculo veiculo) {
+	public boolean create(Veiculo veiculo) {		
 		manager.getTransaction().begin();
 		manager.persist(veiculo);
 		manager.getTransaction().commit();
@@ -37,21 +36,26 @@ public class VeiculoDao {
 		manager.persist(veiculo);
 		manager.getTransaction().commit();
 		return true;
-
 	}
 
-	// CONSULTA UNICA
 	public Veiculo read(String placa) {
 		return manager.find(Veiculo.class, placa);
 	}
 
-	// CONSULTA GERAL
+	@SuppressWarnings("unchecked")
 	public List<Veiculo> readAll() {
 		Query query = manager.createQuery("select v from Veiculo as v");
 		return query.getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Multa> readMultas(String placa){
+		Query query = manager.createQuery("select m from Multa as m where placa_fk = :placa");
+		query.setParameter("placa", placa);
+		return query.getResultList();
+	
+	}
 
-	// REMOVER
 	public boolean delete(String placa) {
 		Veiculo veiculoASerRemovido = manager.find(Veiculo.class, placa);
 
